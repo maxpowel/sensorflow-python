@@ -7,7 +7,7 @@ Sensorflow python has been built for python 3 but with little changes will work
  
 Using Sensorflow
 ================
-Before use sensorflow-python, you should have an sensorflow device ([for example an arduino](https://github.com/maxpowel/sensorflow-arduino)). 
+Before use sensorflow-python, you should have a sensorflow device ([for example an arduino](https://github.com/maxpowel/sensorflow-arduino)). 
 The default configuration uses a serial port and JSON but you can use your custom source (serial port, ethernet... where the data come from) and
 a custom serializer (JSON, YAML, XML, protocol buffers...).
 
@@ -154,6 +154,6 @@ sensors should be configured at the same time.
 Console
 =======
 You can use an interactive console as an administration tool. Check the console.py file.
-Here you have an screenshot
+Here you have a screenshot
 
 ![alt text](https://raw.githubusercontent.com/maxpowel/sensorflow-python/master/console.png "Example of use")
