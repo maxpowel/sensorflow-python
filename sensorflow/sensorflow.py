@@ -135,3 +135,21 @@ class DS18B20Sensor(object):
         # print(address)
         data = sensor_type_packed + struct.pack("BB", 0, len(self.address)) + address_packed
         return data
+
+
+class DHTSensor(object):
+    DHT11 = 11
+    DHT22 = 22
+    DHT21 = 21
+    AM2301 = 21
+    sensor_type = "DHT"
+
+    def __init__(self, dht_type, pin):
+        self.dht_type = dht_type
+        self.pin = pin
+
+    def build_config(self):
+        sensor_type_packed = struct.pack("{size}s".format(size=len(self.sensor_type)), bytes(self.sensor_type, 'ascii'))
+        pinout_info_packed = struct.pack("BB", self.pin, self.dht_type)
+        data = sensor_type_packed + struct.pack("BB", 0, len(pinout_info_packed)) + pinout_info_packed
+        return data

@@ -1,6 +1,7 @@
 import sensorflow
 import cmd
 # example of config: ds18b20 0x28 0xFF 0x10 0x93 0x6F 0x14 0x4 0x11
+# example of config: dht 11 14
 print("Initializing...")
 source = sensorflow.SerialSource()
 serializer = sensorflow.JsonSerializer()
@@ -12,8 +13,13 @@ sf.ping()
 def ds18b20(params):
     return sensorflow.DS18B20Sensor([int(i, 0) for i in params])
 
+
+def dht(params):
+    return sensorflow.DHTSensor(*[int(i) for i in params])
+
 configs = {
-    "ds18b20": ds18b20
+    "ds18b20": ds18b20,
+    "dht": dht
 }
 
 
@@ -58,6 +64,7 @@ class SensorflowCommands(cmd.Cmd):
             while response is None:
                 response = input("Will be written the configuration for {n}, sensors. Continue with it? (y/n)".format(n=len(configuration_list)))
                 if response == "y":
+                    print(configuration_list)
                     print(sf.configure(configuration_list))
                 elif response != "n":
                     response = None
