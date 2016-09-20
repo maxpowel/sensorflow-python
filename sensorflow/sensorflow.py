@@ -4,8 +4,6 @@ import struct
 
 from abc import ABCMeta, abstractmethod
 
-# configure the serial connections (the parameters differs on the device you are connecting to)
-
 
 class SensorflowSource(metaclass=ABCMeta):
     def __iter__(self):
@@ -28,7 +26,6 @@ class SensorflowSource(metaclass=ABCMeta):
         pass
 
 
-
 class Serializer(metaclass=ABCMeta):
     @abstractmethod
     def loads(self, data):
@@ -48,11 +45,11 @@ class JsonSerializer(Serializer):
 
 
 class SerialSource(SensorflowSource):
-    def __init__(self):
+    def __init__(self, port="/dev/ttyUSB0", baudrate=115200, timeout=2):
         self.serial = serial.Serial(
-            port='/dev/ttyUSB0',
-            baudrate=115200,
-            timeout=2
+            port=port,
+            baudrate=baudrate,
+            timeout=timeout
         )
 
     def receive(self):
@@ -63,7 +60,6 @@ class SerialSource(SensorflowSource):
 
     def close(self):
         self.serial.close()
-
 
 
 class Sensorflow(object):
@@ -152,4 +148,13 @@ class DHTSensor(object):
         sensor_type_packed = struct.pack("{size}s".format(size=len(self.sensor_type)), bytes(self.sensor_type, 'ascii'))
         pinout_info_packed = struct.pack("BB", self.pin, self.dht_type)
         data = sensor_type_packed + struct.pack("BB", 0, len(pinout_info_packed)) + pinout_info_packed
+        return data
+
+
+class INA219Sensor(object):
+    sensor_type = "INA219"
+
+    def build_config(self):
+        sensor_type_packed = struct.pack("{size}s".format(size=len(self.sensor_type)), bytes(self.sensor_type, 'ascii'))
+        data = sensor_type_packed + struct.pack("BB", 0, 0)
         return data
